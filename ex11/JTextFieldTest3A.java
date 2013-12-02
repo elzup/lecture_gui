@@ -34,9 +34,7 @@ public class JTextFieldTest3A extends JFrame{
 	}
 
 	class CopyAction implements ActionListener {
-
 		JTextField target;
-
 		CopyAction(JTextField target) {
 			this.target = target;
 		}

@@ -47,6 +47,9 @@ public class JTextFieldTest6 extends JFrame {
 		//		tfa.setDocument(new NumericDocument());
 		pane.add(tfa, BorderLayout.SOUTH);
 
+//		tf1.addActionListener(new FieldAction());
+//		tf2.addActionListener(new FieldAction());
+
 		//inner
 		JPanel paneInner = new JPanel();
 		//		paneInner.setLayout(new BorderLayout());
@@ -63,6 +66,11 @@ public class JTextFieldTest6 extends JFrame {
 		paneInner.add(buS);
 		paneInner.add(buM);
 		paneInner.add(buD);
+
+//		buA.setEnabled(false);
+//		buS.setEnabled(false);
+//		buM.setEnabled(false);
+//		buD.setEnabled(false);
 		//		paneInner.setMaximumSize(new Dimension(100, 100));
 		//buttons
 
@@ -86,16 +94,27 @@ public class JTextFieldTest6 extends JFrame {
 	}
 
 	class FieldAction implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
-		}
-
-		public FieldAction() {
-			// TODO Constracter
+			boolean flag = !("".equals(tf1.getText()) || "".equals(tf2.getText()));
+			buA.setEnabled(flag);
+			buS.setEnabled(flag);
+			buM.setEnabled(flag);
+			buD.setEnabled(flag);
 		}
 	}
+
+//	class FieldAction implements ActionListener {
+
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//			boolean flag = !("".equals(tf1.getText()) || "".equals(tf2.getText()));
+//			buA.setEnabled(flag);
+//			buS.setEnabled(flag);
+//			buM.setEnabled(flag);
+//			buD.setEnabled(flag);
+//		}
+//	}
 
 	class CalcAction implements ActionListener {
 
@@ -110,6 +129,7 @@ public class JTextFieldTest6 extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//念のため
 			if ("".equals(tf1.getText()) || "".equals(tf2.getText())) {
 				tfa.setText("数字がセットされていません");
 				return;
