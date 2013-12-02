@@ -62,6 +62,10 @@ public class JTextFieldTest6 extends JFrame {
 		buS.addActionListener(new CalcActionSubtraction());
 		buM.addActionListener(new CalcActionMultiplication());
 		buD.addActionListener(new CalcActionDivision());
+		buA.setToolTipText("和");
+		buS.setToolTipText("差");
+		buM.setToolTipText("積");
+		buD.setToolTipText("除");
 		paneInner.add(buA);
 		paneInner.add(buS);
 		paneInner.add(buM);
