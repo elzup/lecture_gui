@@ -24,7 +24,7 @@ public class JListTest01D extends JFrame {
 		super(title);
 		pane = (JPanel) getContentPane();
 
-		String[] choice = (new String("apple,base,cup,deepGreen,emeraldGreen,file,google,hop,io,joy,kick")).split(",");
+		String[] choice = "apple,base,cup,deepGreen,emeraldGreen,file,google,hop,io,joy,kick".split(",");
 
 		DefaultListModel listModel = new DefaultListModel();
 		for (int i = 0; i < choice.length; i++) {
