@@ -10,7 +10,6 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 public class JTextFieldTest3A extends JFrame{
-	JTextField tf1, tf2;
 
 	public static void main(String[] args) {
 		JFrame w = new JTextFieldTest3A("JTextFieldTest3A");
@@ -24,23 +23,30 @@ public class JTextFieldTest3A extends JFrame{
 		JPanel pane = (JPanel) getContentPane();
 		pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
 
-		tf1 = new JTextField();
+		JTextField tf1 = new JTextField();
 		tf1.setBorder(new TitledBorder("copy source"));
-		tf1.addActionListener(new CopyAction());
 		pane.add(tf1);
 
-		tf2 = new JTextField();
+		JTextField tf2 = new JTextField();
 		tf2.setBorder(new TitledBorder("paste target"));
 		pane.add(tf2);
+		tf1.addActionListener(new CopyAction(tf2));
 	}
 
 	class CopyAction implements ActionListener {
 
+		JTextField target;
+
+		CopyAction(JTextField target) {
+			this.target = target;
+		}
+
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			JTextField source = (JTextField) e.getSource();
 			String str = source.getText();
-			tf2.setText(str);
+			source.setText("");
+			target.setText(str);
 		}
 	}
-
 }
