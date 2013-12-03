@@ -29,6 +29,7 @@ public class JTextFieldTest7 extends JFrame {
 		listModel = new DefaultListModel();
 		JList list = new JList(listModel);
 		list.setBorder(new TitledBorder("項目一覧"));
+		list.setAutoscrolls(true);
 
 		JTextField tf = new JTextField();
 		tf.setBorder(new TitledBorder("項目入力"));
@@ -48,7 +49,7 @@ public class JTextFieldTest7 extends JFrame {
 			String text = tf.getText();
 			if ("".equals(text))
 				return;
-			System.out.println(text);
+//			System.out.println(text);
 			tf.setText("");
 			listModel.addElement(text);
 		}
