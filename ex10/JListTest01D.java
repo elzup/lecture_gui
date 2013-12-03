@@ -27,9 +27,8 @@ public class JListTest01D extends JFrame {
 		String[] choice = "apple,base,cup,deepGreen,emeraldGreen,file,google,hop,io,joy,kick".split(",");
 
 		DefaultListModel listModel = new DefaultListModel();
-		for (int i = 0; i < choice.length; i++) {
+		for (int i = 0; i < choice.length; i++)
 			listModel.addElement(choice[i]);
-		}
 
 		JList list = new JList(listModel);
 		list.addListSelectionListener(new MyListSelect());
