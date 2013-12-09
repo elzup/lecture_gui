@@ -30,9 +30,6 @@ public class DialogTest03C extends JFrame {
 
       Object[] msg = { "Javaは得意ですか？"};
       int ans = JOptionPane.showConfirmDialog( pane, msg, "はい・いいえ", JOptionPane.YES_NO_OPTION ); // 確認ダイアログを生成・表示、選択した結果が返ってくる
-      switch(ans) {
-
-      }
       msg = null;
       String msg2 = "Javaは" + ((ans == 0) ? "得意です" : "苦手です");
       JOptionPane.showMessageDialog( pane, msg2, "Java answer", JOptionPane.WARNING_MESSAGE); // 確認ダイアログを生成・表示、選択した結果が返ってくる
