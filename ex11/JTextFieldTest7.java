@@ -36,9 +36,9 @@ public class JTextFieldTest7 extends JFrame {
 		tf.addActionListener(new TextActionListener());
 
 		JScrollPane scrollPane = new JScrollPane(list);
+		scrollPane.setViewportView(list);
 		pane.add(scrollPane, BorderLayout.CENTER);
 		pane.add(tf, BorderLayout.SOUTH);
-
 	}
 
 	class TextActionListener implements ActionListener  {
