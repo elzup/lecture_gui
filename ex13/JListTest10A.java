@@ -1,4 +1,4 @@
-package ex12;
+package ex13;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

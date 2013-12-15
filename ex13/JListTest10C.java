@@ -1,4 +1,4 @@
-package ex12;
+package ex13;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -16,18 +16,18 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class JListTest10B extends JFrame {
+public class JListTest10C extends JFrame {
 	DefaultListModel<String> listModel;
 	JList<String> list;
 	JTextField tf;
 	public static void main(String[] args) {
-		JFrame w = new JListTest10B("JListTest10B");
+		JFrame w = new JListTest10C("JListTest10C");
 		w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		w.setSize(400, 320);
 		w.setVisible(true);
 	}
 
-	public JListTest10B(String title) {
+	public JListTest10C(String title) {
 		super(title);
 		JPanel pane = (JPanel) getContentPane();
 		pane.setLayout(new BorderLayout());
@@ -36,9 +36,12 @@ public class JListTest10B extends JFrame {
 		pane.add(headPane, BorderLayout.PAGE_START);
 
 		JButton addButton = new JButton("追加");
+		JButton updButton = new JButton("変更");
 		ActionListener tal = new TextAddActionListener();
 		addButton.addActionListener(tal);
+		updButton.addActionListener(new TextUpdateActionListener());
 		headPane.add(addButton);
+		headPane.add(updButton);
 
 		listModel = new DefaultListModel<String>();
 		list = new JList<String>(listModel);
@@ -65,6 +68,17 @@ public class JListTest10B extends JFrame {
 //			System.out.println(text);
 			tf.setText("");
 			listModel.addElement(text);
+		}
+	}
+
+	class TextUpdateActionListener implements ActionListener  {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String text = tf.getText();
+			if ("".equals(text))
+				return;
+			int i = list.getSelectedIndex();
+			listModel.set(i, text);
 		}
 	}
 
