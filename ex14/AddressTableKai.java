@@ -127,10 +127,8 @@ public class AddressTableKai extends JFrame {
 		}
 
 		public void addRow() {
-			String[] n  = new String[list.get(0).length];
-			for (int i = 0; i < n.length; i++)
-				n[i] = "";
-			this.addRow(n);
+			for (int i = 0; i < list.get(0).length; i++)
+				this.list.add(new String[list.get(0).length]);
 		}
 
 		@Override
