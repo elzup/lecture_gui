@@ -114,9 +114,11 @@ public class AddressTableKai extends JFrame {
 				for (String[] cells : list) {
 					String line = cells[0];
 					for (int i = 1; i < cells.length; i++)
-						line += "," + line;
-					bw.write(line);
+						line += "," + cells[i];
+					System.out.println(line);
+					bw.write(line + "\n");
 				}
+				bw.close();
 			} catch (FileNotFoundException e) {
 				System.out.println(file_path + file_name + "が見つかりません。");
 			} catch (IOException e) {
