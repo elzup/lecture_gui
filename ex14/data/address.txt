@@ -1,0 +1,4 @@
+小野,栃木,123-45-6789,ono@tochigi
+Abe,Saitama,090-1234-5678,abe@saitama
+スコット,Okinawa,0987-65-4321,scott@okinawa
+Sasaki,Osaka,06-7890-1234,sasaki@osaka
