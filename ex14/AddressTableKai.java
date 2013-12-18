@@ -91,6 +91,7 @@ public class AddressTableKai extends JFrame {
 		}
 
 		public void read() {
+			this.list.clear();
 			try {
 				@SuppressWarnings("resource")
 				BufferedReader br = new BufferedReader(new FileReader(new File(file_path + file_name)));
@@ -127,8 +128,8 @@ public class AddressTableKai extends JFrame {
 		}
 
 		public void addRow() {
-			for (int i = 0; i < list.get(0).length; i++)
-				this.list.add(new String[list.get(0).length]);
+			this.list.add(new String[list.get(0).length]);
+			fireTableDataChanged();
 		}
 
 		@Override
