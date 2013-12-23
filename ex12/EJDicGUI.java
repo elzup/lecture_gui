@@ -30,6 +30,8 @@ public class EJDicGUI extends JFrame {
 	JPanel pane;
 	EJDic dictionary;
 
+	static String DIR =  "ex12/data/";
+
 	public static void main(String[] args) {
 		JFrame w = new EJDicGUI("EJDicGUI");
 		w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,7 +97,7 @@ public class EJDicGUI extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			JFileChooser fileChooser = new JFileChooser(".");
+			JFileChooser fileChooser = new JFileChooser(DIR);
 
 			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			fileChooser.setDialogTitle("ファイルを開く");
@@ -121,6 +123,19 @@ public class EJDicGUI extends JFrame {
 
 		public void actionPerformed(ActionEvent e) {
 			//ここから作る
+			JFileChooser fileChooser = new JFileChooser(DIR);
+
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fileChooser.setDialogTitle("ファイルを保存する");
+			fileChooser.setFileFilter(new TextFileFilter());
+
+			int ret = fileChooser.showSaveDialog(pane);
+
+			if (ret != JFileChooser.APPROVE_OPTION) return;
+
+			String filename = fileChooser.getSelectedFile().getAbsolutePath();
+
+			System.out.println(":" + filename);
 			dictionary.save("");
 		}
 	}
