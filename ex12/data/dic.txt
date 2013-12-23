@@ -1,0 +1,6 @@
+tomato,トマト
+strawberry,苺
+orange,蜜柑
+onion,玉葱
+apple,林檎
+banana,バナナ
