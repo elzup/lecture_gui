@@ -60,8 +60,8 @@ public class AddressBookGUI extends JFrame {
 		item = new JMenuItem(new ExitAction());
 		fileMenu.add(item);
 
-		model = new DefaultListModel();
-		list = new JList(model);
+		model = new DefaultListModel<String>();
+		list = new JList<String>(model);
 		list.addListSelectionListener(new NameSelect());
 		JScrollPane sc = new JScrollPane(list);
 		sc.setBorder(new TitledBorder("名前一覧"));
@@ -96,6 +96,7 @@ public class AddressBookGUI extends JFrame {
 
 	class NameSelect implements ListSelectionListener {
 		public void valueChanged(ListSelectionEvent e) {
+			if (!e.getValueIsAdjusting()) return;
 			String name = list.getSelectedValue();
 			Address add = book.findName(name);
 			nameField.setText(name);
@@ -120,7 +121,6 @@ public class AddressBookGUI extends JFrame {
 				return;
 			String filename = fileChooser.getSelectedFile().getAbsolutePath();
 			book.open(filename);
-			DefaultListModel<String> model = (DefaultListModel<String>) list.getModel();
 			model.clear();
 			for (String name : book.getNames())
 				model.addElement(name);
@@ -170,7 +170,20 @@ public class AddressBookGUI extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-
+			String name = nameField.getText();
+			String address = addressField.getText();
+			String tel = telField.getText();
+			String email = emailField.getText();
+			DefaultListModel<String> model = (DefaultListModel<String>) list.getModel();
+			if ("".equals(name)|| "".equals(address) || "".equals(tel) || "".equals(email)
+					|| model.contains(name))
+				return;
+			model.addElement(name);
+			book.add(new Address(name, address, tel, email));
+			nameField.setText("");
+			addressField.setText("");
+			telField.setText("");
+			emailField.setText("");
 		}
 	}
 
@@ -181,7 +194,19 @@ public class AddressBookGUI extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-
+			String name = nameField.getText();
+			String address = addressField.getText();
+			String tel = telField.getText();
+			String email = emailField.getText();
+			DefaultListModel<String> model = (DefaultListModel<String>) list.getModel();
+			if ("".equals(name)|| "".equals(address) || "".equals(tel) || "".equals(email)
+					|| !model.contains(name))
+				return;
+			Address add = book.findName(name);
+			add.setName(name);
+			add.setAddress(address);
+			add.setTel(tel);
+			add.setEmail(email);
 		}
 	}
 
@@ -192,7 +217,17 @@ public class AddressBookGUI extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-
+			int index = list.getSelectedIndex();
+			if( index == -1)return ;
+			String name = list.getSelectedValue();
+			Object[] msg = { "アドレス [ " + name + " ]を消去します" };
+			int ans = (int) JOptionPane.showConfirmDialog(pane, msg, "アドレスの消去", JOptionPane.YES_NO_OPTION);
+			if (JOptionPane.YES_OPTION == ans) {
+				book.remove(book.findName(name));
+				list.setSelectedIndex(-1);
+				System.out.println(index);
+				model.remove(index);
+			}
 		}
 	}
 
