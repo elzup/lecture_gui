@@ -1,0 +1,7 @@
+update,更新
+banana,バナナ
+orange,蜜柑
+text,文章
+apple,林檎
+strawberry,苺
+onion,玉葱
