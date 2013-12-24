@@ -108,19 +108,14 @@ public class EJDicGUI extends JFrame {
 			putValue(Action.NAME, "開く");
 			putValue(Action.SHORT_DESCRIPTION, "開く");
 		}
-
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fileChooser = new JFileChooser(DIR);
-
 			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			fileChooser.setDialogTitle("ファイルを開く");
 			fileChooser.setFileFilter(new TextFileFilter());
-
 			int ret = fileChooser.showOpenDialog(pane);
-
 			if (ret != JFileChooser.APPROVE_OPTION)
 				return;
-
 			String filename = fileChooser.getSelectedFile().getAbsolutePath();
 			dictionary.open(filename);
 			DefaultListModel<String> model = (DefaultListModel<String>) list.getModel();
@@ -135,22 +130,15 @@ public class EJDicGUI extends JFrame {
 			putValue(Action.NAME, "保存");
 			putValue(Action.SHORT_DESCRIPTION, "保存");
 		}
-
 		public void actionPerformed(ActionEvent e) {
-			//ここから作る
 			JFileChooser fileChooser = new JFileChooser(DIR);
-
 			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			fileChooser.setDialogTitle("ファイルを保存する");
 			fileChooser.setFileFilter(new TextFileFilter());
-
 			int ret = fileChooser.showSaveDialog(pane);
-
 			if (ret != JFileChooser.APPROVE_OPTION)
 				return;
-
 			String filename = fileChooser.getSelectedFile().getAbsolutePath();
-
 			if (!filename.endsWith(".txt"))
 				filename += ".txt";
 			dictionary.save(filename);
@@ -162,7 +150,6 @@ public class EJDicGUI extends JFrame {
 			putValue(Action.NAME, "終了");
 			putValue(Action.SHORT_DESCRIPTION, "終了");
 		}
-
 		public void actionPerformed(ActionEvent e) {
 			Object[] msg = { "プログラムを終了してよろしいですか？" };
 			int ans = (int) JOptionPane.showConfirmDialog(pane, msg, "確認", JOptionPane.YES_NO_OPTION);
@@ -177,7 +164,6 @@ public class EJDicGUI extends JFrame {
 			putValue(Action.NAME, "追加");
 			putValue(Action.SHORT_DESCRIPTION, "追加");
 		}
-
 		public void actionPerformed(ActionEvent e) {
 			String eng = english.getText();
 			String jap = japanese.getText();
@@ -196,7 +182,6 @@ public class EJDicGUI extends JFrame {
 			putValue(Action.NAME, "更新");
 			putValue(Action.SHORT_DESCRIPTION, "更新");
 		}
-
 		public void actionPerformed(ActionEvent e) {
 			String eng = english.getText();
 			String jap = japanese.getText();
@@ -212,7 +197,6 @@ public class EJDicGUI extends JFrame {
 			putValue(Action.NAME, "削除");
 			putValue(Action.SHORT_DESCRIPTION, "削除");
 		}
-
 		public void actionPerformed(ActionEvent e) {
 			int index = list.getSelectedIndex();
 			if( index == -1)return ;
@@ -229,7 +213,6 @@ public class EJDicGUI extends JFrame {
 	class TextFileFilter extends FileFilter {
 		String[] extensions = { "txt" };
 		String description = "テキストファイル *.txt";
-
 		@Override
 		public boolean accept(File f) {
 			if (f.isDirectory())
@@ -242,7 +225,6 @@ public class EJDicGUI extends JFrame {
 			}
 			return false;
 		}
-
 		@Override
 		public String getDescription() {
 			return this.description;
