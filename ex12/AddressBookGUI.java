@@ -1,6 +1,7 @@
 package ex12;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
@@ -26,8 +27,8 @@ import javax.swing.filechooser.FileFilter;
 
 public class AddressBookGUI extends JFrame {
 	JTextField nameField, addressField, telField, emailField;
-	DefaultListModel model;
-	JList list;
+	DefaultListModel<String> model;
+	JList<String> list;
 	JButton addButton, removeButton, updateButton;
 	JPanel pane;
 	AddressBook book;
@@ -81,19 +82,26 @@ public class AddressBookGUI extends JFrame {
 		emailField.setBorder(new TitledBorder("メール"));
 		fields.add(emailField);
 
+		JPanel buttons = new JPanel(new FlowLayout());
 		addButton = new JButton(new AddAction());
-		fields.add(addButton);
+		buttons.add(addButton);
 		updateButton = new JButton(new UpdateAction());
-		fields.add(updateButton);
+		buttons.add(updateButton);
 		removeButton = new JButton(new RemoveAction());
-		fields.add(removeButton);
+		buttons.add(removeButton);
+		fields.add(buttons);
 
 		pane.add(fields, BorderLayout.EAST);
 	}
 
 	class NameSelect implements ListSelectionListener {
 		public void valueChanged(ListSelectionEvent e) {
-
+			String name = list.getSelectedValue();
+			Address add = book.findName(name);
+			nameField.setText(name);
+			addressField.setText(add.getAddress());
+			telField.setText(add.getTel());
+			emailField.setText(add.getEmail());
 		}
 	}
 
