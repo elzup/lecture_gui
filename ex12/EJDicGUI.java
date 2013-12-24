@@ -151,7 +151,7 @@ public class EJDicGUI extends JFrame {
 			putValue(Action.SHORT_DESCRIPTION, "終了");
 		}
 		public void actionPerformed(ActionEvent e) {
-			Object[] msg = { "プログラムを終了してよろしいですか？" };
+			Object[] msg = { "アプリケーションを終了してよろしいですか？" };
 			int ans = (int) JOptionPane.showConfirmDialog(pane, msg, "確認", JOptionPane.YES_NO_OPTION);
 			if (JOptionPane.YES_OPTION == ans) {
 				System.exit(0);
