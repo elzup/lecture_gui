@@ -4,12 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.text.ParseException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -23,6 +25,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.text.MaskFormatter;
 
 public class EJDicGUI extends JFrame {
 	JTextField english, japanese;
@@ -59,8 +62,17 @@ public class EJDicGUI extends JFrame {
 		fileMenu.add(item);
 
 		JPanel fields = new JPanel(new GridLayout(1, 2));
-		english = new JTextField();
+		MaskFormatter mf = new MaskFormatter();
+		try {
+			mf.setMask("????????????????????");
+		} catch (ParseException e) {
+			// TODO catch block
+			e.printStackTrace();
+		}
+		mf.setValidCharacters("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-");
+		english = new JFormattedTextField(mf);
 		english.setBorder(new TitledBorder("英語"));
+
 		fields.add(english);
 		japanese = new JTextField();
 		japanese.setBorder(new TitledBorder("日本語"));
