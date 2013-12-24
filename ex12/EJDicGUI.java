@@ -87,7 +87,10 @@ public class EJDicGUI extends JFrame {
 
 	class WordSelect implements ListSelectionListener {
 		public void valueChanged(ListSelectionEvent e) {
-
+			String eng = list.getSelectedValue();
+			String jap = dictionary.get(eng);
+			english.setText(eng);
+			japanese.setText(jap);
 		}
 	}
 
@@ -112,6 +115,7 @@ public class EJDicGUI extends JFrame {
 			String filename = fileChooser.getSelectedFile().getAbsolutePath();
 			dictionary.open(filename);
 			DefaultListModel<String> model = (DefaultListModel<String>) list.getModel();
+			model.clear();
 			for (String key : dictionary.keySet())
 				model.addElement(key);
 		}
@@ -151,7 +155,6 @@ public class EJDicGUI extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-
 			Object[] msg = { "プログラムを終了してよろしいですか？" };
 			int ans = (int) JOptionPane.showConfirmDialog(pane, msg, "確認", JOptionPane.YES_NO_OPTION);
 			if (JOptionPane.YES_OPTION == ans) {
@@ -167,7 +170,15 @@ public class EJDicGUI extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-
+			String eng = english.getText();
+			String jap = japanese.getText();
+			DefaultListModel<String> model = (DefaultListModel<String>) list.getModel();
+			if (model.contains(eng) || "".equals(eng) || "".equals(jap))
+				return;
+			model.addElement(eng);
+			dictionary.put(eng, jap);
+			english.setText("");
+			japanese.setText("");
 		}
 	}
 
@@ -178,7 +189,12 @@ public class EJDicGUI extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-
+			String eng = english.getText();
+			String jap = japanese.getText();
+			DefaultListModel<String> model = (DefaultListModel<String>) list.getModel();
+			if (!model.contains(eng) || "".equals(eng) || "".equals(jap))
+				return;
+			dictionary.put(eng, jap);
 		}
 	}
 
@@ -189,7 +205,15 @@ public class EJDicGUI extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-
+			int index = list.getSelectedIndex();
+			if( index == -1)return ;
+			String eng = list.getSelectedValue();
+			Object[] msg = { "[ " + eng + " ]を消去します" };
+			int ans = (int) JOptionPane.showConfirmDialog(pane, msg, "単語の消去", JOptionPane.YES_NO_OPTION);
+			if (JOptionPane.YES_OPTION == ans) {
+				dictionary.remove(eng);
+				((DefaultListModel<String>) list.getModel()).remove(index);
+			}
 		}
 	}
 
