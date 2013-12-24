@@ -15,6 +15,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -30,7 +31,7 @@ public class EJDicGUI extends JFrame {
 	JPanel pane;
 	EJDic dictionary;
 
-	static String DIR =  "ex12/data/";
+	static String DIR = "ex12/data/";
 
 	public static void main(String[] args) {
 		JFrame w = new EJDicGUI("EJDicGUI");
@@ -105,7 +106,8 @@ public class EJDicGUI extends JFrame {
 
 			int ret = fileChooser.showOpenDialog(pane);
 
-			if (ret != JFileChooser.APPROVE_OPTION) return;
+			if (ret != JFileChooser.APPROVE_OPTION)
+				return;
 
 			String filename = fileChooser.getSelectedFile().getAbsolutePath();
 			dictionary.open(filename);
@@ -131,12 +133,14 @@ public class EJDicGUI extends JFrame {
 
 			int ret = fileChooser.showSaveDialog(pane);
 
-			if (ret != JFileChooser.APPROVE_OPTION) return;
+			if (ret != JFileChooser.APPROVE_OPTION)
+				return;
 
 			String filename = fileChooser.getSelectedFile().getAbsolutePath();
 
-			System.out.println(":" + filename);
-			dictionary.save("");
+			if (!filename.endsWith(".txt"))
+				filename += ".txt";
+			dictionary.save(filename);
 		}
 	}
 
@@ -148,6 +152,11 @@ public class EJDicGUI extends JFrame {
 
 		public void actionPerformed(ActionEvent e) {
 
+			Object[] msg = { "プログラムを終了してよろしいですか？" };
+			int ans = (int) JOptionPane.showConfirmDialog(pane, msg, "確認", JOptionPane.YES_NO_OPTION);
+			if (JOptionPane.YES_OPTION == ans) {
+				System.exit(0);
+			}
 		}
 	}
 
@@ -185,11 +194,13 @@ public class EJDicGUI extends JFrame {
 	}
 
 	class TextFileFilter extends FileFilter {
-		String[] extensions = {"txt"};
-		String description = "image file";
+		String[] extensions = { "txt" };
+		String description = "テキストファイル *.txt";
+
 		@Override
 		public boolean accept(File f) {
-			if (f.isDirectory()) return true;
+			if (f.isDirectory())
+				return true;
 			String name = f.getName().toLowerCase();
 			for (int i = 0; i < extensions.length; i++) {
 				if (name.endsWith(extensions[i])) {
@@ -198,6 +209,7 @@ public class EJDicGUI extends JFrame {
 			}
 			return false;
 		}
+
 		@Override
 		public String getDescription() {
 			return this.description;
