@@ -1,7 +1,6 @@
 package ex12;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
@@ -25,24 +24,23 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 
-public class AddressBookGUI extends JFrame {
+public class AddressBookGUI_s extends JFrame {
 	JTextField nameField, addressField, telField, emailField;
-	DefaultListModel<String> model;
-	JList<String> list;
+	DefaultListModel model;
+	JList list;
 	JButton addButton, removeButton, updateButton;
 	JPanel pane;
 	AddressBook book;
-
-	static String DIR = "ex12/data/";
+	static String FILE_EXTENTION = "txt";
 
 	public static void main(String[] args) {
-		JFrame w = new AddressBookGUI("AddressBookGUI");
+		JFrame w = new AddressBookGUI_s("AddressBookGUI");
 		w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		w.setSize(400, 300);
+		w.setSize(400, 400);
 		w.setVisible(true);
 	}
 
-	public AddressBookGUI(String title) {
+	public AddressBookGUI_s(String title) {
 		super(title);
 		book = new AddressBook();
 		pane = (JPanel) getContentPane();
@@ -60,8 +58,8 @@ public class AddressBookGUI extends JFrame {
 		item = new JMenuItem(new ExitAction());
 		fileMenu.add(item);
 
-		model = new DefaultListModel<String>();
-		list = new JList<String>(model);
+		model = new DefaultListModel();
+		list = new JList(model);
 		list.addListSelectionListener(new NameSelect());
 		JScrollPane sc = new JScrollPane(list);
 		sc.setBorder(new TitledBorder("名前一覧"));
@@ -82,27 +80,25 @@ public class AddressBookGUI extends JFrame {
 		emailField.setBorder(new TitledBorder("メール"));
 		fields.add(emailField);
 
-		JPanel buttons = new JPanel(new FlowLayout());
 		addButton = new JButton(new AddAction());
-		buttons.add(addButton);
+		fields.add(addButton);
 		updateButton = new JButton(new UpdateAction());
-		buttons.add(updateButton);
+		fields.add(updateButton);
 		removeButton = new JButton(new RemoveAction());
-		buttons.add(removeButton);
-		fields.add(buttons);
+		fields.add(removeButton);
 
 		pane.add(fields, BorderLayout.EAST);
 	}
 
 	class NameSelect implements ListSelectionListener {
 		public void valueChanged(ListSelectionEvent e) {
-			if (!e.getValueIsAdjusting()) return;
-			String name = list.getSelectedValue();
-			Address add = book.findName(name);
+			String name = (String)list.getSelectedValue();
+			if (name == null) return ;
+			Address address = book.findName(name);
 			nameField.setText(name);
-			addressField.setText(add.getAddress());
-			telField.setText(add.getTel());
-			emailField.setText(add.getEmail());
+			addressField.setText(address.getAddress());
+			emailField.setText(address.getEmail());
+			telField.setText(address.getTel());
 		}
 	}
 
@@ -111,21 +107,50 @@ public class AddressBookGUI extends JFrame {
 			putValue(Action.NAME, "開く");
 			putValue(Action.SHORT_DESCRIPTION, "開く");
 		}
+
 		public void actionPerformed(ActionEvent e) {
-			JFileChooser fileChooser = new JFileChooser(DIR);
+			JFileChooser fileChooser = new JFileChooser(".");
+
 			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			fileChooser.setDialogTitle("ファイルを開く");
-			fileChooser.setFileFilter(new TextFileFilter());
+			fileChooser.setDialogTitle("アドレス選択");
+			fileChooser.setFileFilter(new TextFileFilter()); // フィルタを設定
+
 			int ret = fileChooser.showOpenDialog(pane);
+
 			if (ret != JFileChooser.APPROVE_OPTION)
 				return;
 			String filename = fileChooser.getSelectedFile().getAbsolutePath();
 			book.open(filename);
+
+			DefaultListModel model = (DefaultListModel) list.getModel();
 			model.clear();
-			for (String name : book.getNames())
-				model.addElement(name);
+			for (String key : book.getNames()) {
+				model.addElement(key);
+			}
 		}
 	}
+
+	class TextFileFilter extends FileFilter {
+		String[] extensions = { FILE_EXTENTION }; // 拡張子を指定
+		String description = "text file";
+
+		public boolean accept(File f) { // 受け入れるファイルかどうかチェック
+			if (f.isDirectory())
+				return true; // これを行わないと他のディレクトリーに移れない
+			String name = f.getName().toLowerCase();
+			for (int i = 0; i < extensions.length; i++) {
+				if (name.endsWith(extensions[i])) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+	}
+
 
 	class SaveAction extends AbstractAction {
 		SaveAction() {
@@ -134,16 +159,20 @@ public class AddressBookGUI extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			JFileChooser fileChooser = new JFileChooser(DIR);
+			JFileChooser fileChooser = new JFileChooser(".");
+
 			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			fileChooser.setDialogTitle("ファイルを保存する");
-			fileChooser.setFileFilter(new TextFileFilter());
+			fileChooser.setDialogTitle("保存ファイル選択");
+			fileChooser.setFileFilter(new TextFileFilter()); // フィルタを設定
+
 			int ret = fileChooser.showSaveDialog(pane);
+
+			System.out.println(ret + ":");
 			if (ret != JFileChooser.APPROVE_OPTION)
 				return;
 			String filename = fileChooser.getSelectedFile().getAbsolutePath();
-			if (!filename.endsWith(".txt"))
-				filename += ".txt";
+			if (!filename.endsWith("."+FILE_EXTENTION))
+				filename += "."+FILE_EXTENTION;
 			book.save(filename);
 		}
 	}
@@ -155,11 +184,11 @@ public class AddressBookGUI extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			Object[] msg = { "アプリケーションを終了してよろしいですか？" };
-			int ans = (int) JOptionPane.showConfirmDialog(pane, msg, "確認", JOptionPane.YES_NO_OPTION);
-			if (JOptionPane.YES_OPTION == ans) {
-				System.exit(0);
+			int anser = JOptionPane.showConfirmDialog(pane, "終了しますか？", "メッセージ", JOptionPane.YES_NO_OPTION);
+			if (anser != JOptionPane.OK_OPTION) {
+				return;
 			}
+			System.exit(0);
 		}
 	}
 
@@ -170,20 +199,18 @@ public class AddressBookGUI extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			String name = nameField.getText();
-			String address = addressField.getText();
-			String tel = telField.getText();
-			String email = emailField.getText();
-			DefaultListModel<String> model = (DefaultListModel<String>) list.getModel();
-			if ("".equals(name)|| "".equals(address) || "".equals(tel) || "".equals(email)
-					|| model.contains(name))
+			String na = nameField.getText();
+			String ad = addressField.getText();
+			String te = telField.getText();
+			String em = emailField.getText();
+
+			if(("".equals(na)||"".equals(ad)||"".equals(te)||"".equals(em))||book.getNames().contains(na)){
 				return;
-			model.addElement(name);
-			book.add(new Address(name, address, tel, email));
-			nameField.setText("");
-			addressField.setText("");
-			telField.setText("");
-			emailField.setText("");
+			}
+			book.add(new Address(na, ad, te, em));
+			DefaultListModel model = (DefaultListModel) list.getModel();
+						model.addElement(na);
+
 		}
 	}
 
@@ -194,19 +221,17 @@ public class AddressBookGUI extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			String name = nameField.getText();
-			String address = addressField.getText();
-			String tel = telField.getText();
-			String email = emailField.getText();
-			DefaultListModel<String> model = (DefaultListModel<String>) list.getModel();
-			if ("".equals(name)|| "".equals(address) || "".equals(tel) || "".equals(email)
-					|| !model.contains(name))
+			String na = nameField.getText();
+			String ad = addressField.getText();
+			String te = telField.getText();
+			String em = emailField.getText();
+			if((na==null||ad==null||te==null||em==null)||!book.getNames().contains(na)){
 				return;
-			Address add = book.findName(name);
-			add.setName(name);
-			add.setAddress(address);
-			add.setTel(tel);
-			add.setEmail(email);
+			}
+			Address address =book.findName(na);
+			address.setAddress(ad);
+			address.setEmail(em);
+			address.setTel(te);
 		}
 	}
 
@@ -217,37 +242,24 @@ public class AddressBookGUI extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			int index = list.getSelectedIndex();
-			if( index == -1)return ;
-			String name = list.getSelectedValue();
-			Object[] msg = { "アドレス [ " + name + " ]を消去します" };
-			int ans = (int) JOptionPane.showConfirmDialog(pane, msg, "アドレスの消去", JOptionPane.YES_NO_OPTION);
-			if (JOptionPane.YES_OPTION == ans) {
-				book.remove(book.findName(name));
-				list.setSelectedIndex(-1);
-				model.remove(index);
-			}
-		}
-	}
+			DefaultListModel model = (DefaultListModel) list.getModel();
 
-	class TextFileFilter extends FileFilter {
-		String[] extensions = { "txt" };
-		String description = "テキストファイル *.txt";
-		@Override
-		public boolean accept(File f) {
-			if (f.isDirectory())
-				return true;
-			String name = f.getName().toLowerCase();
-			for (int i = 0; i < extensions.length; i++) {
-				if (name.endsWith(extensions[i])) {
-					return true;
-				}
+			int index =  list.getSelectedIndex();
+			if(index==-1){
+				return;
 			}
-			return false;
-		}
-		@Override
-		public String getDescription() {
-			return this.description;
+			int anser = JOptionPane.showConfirmDialog(pane,"削除しますか？","メッセージ",JOptionPane.YES_NO_OPTION);
+			if(anser!=JOptionPane.OK_OPTION){
+				return;
+			}
+			book.remove(book.findName((String)list.getSelectedValue()));
+			list.setSelectedIndex(-1);
+			model.remove(index);
+//			getContentPane().setVisible(false);
+//			getContentPane().setVisible(true);
+			pane.setVisible(false);
+			pane.setVisible(true);
+			//model.setSize(model.getSize());
 		}
 	}
 }
